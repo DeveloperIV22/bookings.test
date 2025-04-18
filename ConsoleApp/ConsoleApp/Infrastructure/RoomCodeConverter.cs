@@ -8,13 +8,15 @@ namespace ConsoleApp.Infrastructure
     {
         public override RoomCode ReadJson(JsonReader reader, Type objectType, RoomCode existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            // Ensure the reader's value is a string and convert it to a RoomCode
+            if (reader.TokenType != JsonToken.String || reader.Value == null)
+            {
+                throw new JsonSerializationException("Invalid value");
+            }
             return new RoomCode(reader.Value.ToString());
         }
 
         public override void WriteJson(JsonWriter writer, RoomCode value, JsonSerializer serializer)
         {
-            // Serialize the RoomCode as a string
             writer.WriteValue(value);
         }
     }

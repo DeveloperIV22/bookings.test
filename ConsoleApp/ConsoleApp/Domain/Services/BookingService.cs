@@ -17,11 +17,9 @@ namespace ConsoleApp.Domain.Services
         }
         public int GetAvailability(FilteredBookingContext context, RoomCode roomType)
         {
-            // Step 1: Get available rooms per room type using the existing method
             List<AvailableRoom> availableRoomsPerRoomType = GetAvailableRoomsPerRoomType(
                 context.Hotel, context.Bookings, context.DateRange);
 
-            // Step 2: Find the available rooms for the requested room type
             var roomAvailability = availableRoomsPerRoomType
                 .FirstOrDefault(x => x.RoomCode == roomType);
 

@@ -1,7 +1,4 @@
-using NUnit.Framework;
-using ConsoleApp.Domain.Models;
 using ConsoleApp.Domain.ValueObjects;
-using System.Collections.Generic;
 using ConsoleApp.Domain.Services;
 using ConsoleApp.Domain.Models.Enums;
 

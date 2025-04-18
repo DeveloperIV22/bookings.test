@@ -1,6 +1,6 @@
 ﻿public record RoomCode
 {
-    private readonly string Value;
+    private string Value;
 
     public RoomCode(string value)
     {

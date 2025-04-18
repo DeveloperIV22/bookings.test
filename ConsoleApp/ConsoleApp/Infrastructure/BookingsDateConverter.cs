@@ -26,7 +26,7 @@ public class BookingsDateConverter : JsonConverter<DateOnly>
         else
         {
             // this should be catch in some global error handler 
-            throw new Exception($"Cannot convert date ${stringifiedDate}");
+            throw new Exception($"Cannot convert date");
         }
     }
 
