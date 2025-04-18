@@ -1,0 +1,49 @@
+﻿💬 1. Availability Command
+✅ Input Example:
+scss
+Copy
+Edit
+Availability(H1, 20240901, SGL)
+Availability(H1, 20240901-20240903, DBL)
+🧠 What to do:
+Look up the hotel H1
+
+Find how many total rooms of that type exist (SGL or DBL)
+
+Count how many are already booked in that date or date range
+
+Show the result: available = total - booked
+
+💡 You can even return negative numbers if they overbooked
+
+
+
+
+
+==========================
+==========================
+2. RoomTypes Command
+✅ Input Example:
+scss
+Copy
+Edit
+RoomTypes(H1, 20240905, 3)
+RoomTypes(H1, 20240905-20240907, 5)
+🧠 What to do:
+Find a combo of available rooms in that time that can fit the number of people (3 or 5).
+
+Rules:
+
+Fill rooms completely if you can
+
+If you must use a room with extra space, mark it with a !
+
+Minimize how many total rooms are used
+
+If you can’t fit all the people, show an error
+
+🧾 Output Example:
+css
+Copy
+Edit
+H1: DBL, DBL!
