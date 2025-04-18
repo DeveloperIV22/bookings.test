@@ -87,11 +87,16 @@ namespace ConsoleApp.Domain.Services
                 {
                     var rooms = orderedTotalAvailableRoomsPerRoomType
                         .Where(x => x.Available > 0);
+
+                    if(rooms.Count() == 0)
+                    {
+                        return totalPeopleToBook;
+                    }
                     
                     AvailableRoom selectedRoom = rooms. // maybe we have a room that fits exactly remaining peple to book.
                                         FirstOrDefault(x => hotel.RoomTypes.Single(r => r.Code == x.RoomCode).Size >= totalPeopleToBook);
 
-                    if(selectedRoom == null) // if not then just select the first
+                    if(selectedRoom == null) // if not then just select the first, they are ordered by sie, from smallest to biggest.
                     {
                         selectedRoom = rooms.FirstOrDefault();
                     }
@@ -118,7 +123,7 @@ namespace ConsoleApp.Domain.Services
 
         private static List<AvailableRoom> GetAvailableRoomsPerRoomType(Hotel hotel, List<Booking> bookings, DateRange requiredDateRange)
         {
-            Dictionary<RoomCode, Dictionary<DateOnly, int>> bookedCountPerRoomTypeForRequiredDateRange = GetBookedCountPerRoomPerDate(hotel, bookings, requiredDateRange);
+            Dictionary<RoomCode, Dictionary<DateOnly, int>> bookedCountPerRoomTypeForRequiredDateRange = GetBookedCountPerRoomPerCurrentDateInterval(hotel, bookings, requiredDateRange);
             Dictionary<RoomCode, int> totalAvailableRoomsPerRoomType = GetAvailableCountPerRoomForCurrentDateInterval(hotel, bookedCountPerRoomTypeForRequiredDateRange);
 
             List<AvailableRoom> orderedTotalAvailableRoomsPerRoomType = totalAvailableRoomsPerRoomType
@@ -148,7 +153,7 @@ namespace ConsoleApp.Domain.Services
             return totalAvailableRoomsPerRoomType;
         }
 
-        private static Dictionary<RoomCode, Dictionary<DateOnly, int>> GetBookedCountPerRoomPerDate(Hotel hotel, List<Booking> bookings, DateRange requiredDateRange)
+        private static Dictionary<RoomCode, Dictionary<DateOnly, int>> GetBookedCountPerRoomPerCurrentDateInterval(Hotel hotel, List<Booking> bookings, DateRange requiredDateRange)
         {
             Dictionary<RoomCode, Dictionary<DateOnly, int>> bookedCountPerRoomTypeForRequiredDateRange = new Dictionary<RoomCode, Dictionary<DateOnly, int>>();
 

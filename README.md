@@ -6,7 +6,10 @@ Then we have unit tests.
 
 And the algorithm is made by me alone, without any help from ChatGPT.
 
-I worked about 10-11 hours on this project.
+The algorithm is made to be simple to understand, NOT efficient at this point in time.
+I understand the algorithm is not perfect, but I did not want to steal something from the internet.
+
+I worked about 10-13 hours on this project.
 
 I also have experience with optaplanner, so I can use it to setup some booking optimization problems if that is in any way required.
 Perhaps I can do a small home assigned with it.
