@@ -52,7 +52,7 @@ public class RoomAllocationTest
         var result = bookingService.AllocateRooms(context, peopleToBook);
 
         Assert.IsTrue(result.Success);
-        Assert.AreEqual(2, result.CurrentlyAllocatedRooms.Count);
+        Assert.That(result.CurrentlyAllocatedRooms.Count, Is.EqualTo(2));
         Assert.IsTrue(result.CurrentlyAllocatedRooms.Any(x => x.UnderBooked));
     }
 
@@ -82,7 +82,7 @@ public class RoomAllocationTest
         var result = bookingService.AllocateRooms(context, peopleToBook);
 
         Assert.IsTrue(result.Success);
-        Assert.AreEqual(2, result.CurrentlyAllocatedRooms.Count);
+        Assert.That(result.CurrentlyAllocatedRooms.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -97,7 +97,7 @@ public class RoomAllocationTest
         var result = bookingService.AllocateRooms(context, peopleToBook);
 
         Assert.IsTrue(result.Success);
-        Assert.AreEqual(1, result.CurrentlyAllocatedRooms.Count);
+        Assert.That(result.CurrentlyAllocatedRooms.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -115,7 +115,7 @@ public class RoomAllocationTest
         var result = bookingService.AllocateRooms(context, peopleToBook);
 
         Assert.IsTrue(result.Success);
-        Assert.AreEqual(1, result.CurrentlyAllocatedRooms.Count(t => t.RoomType == new RoomCode("SGL")));
+        Assert.That(result.CurrentlyAllocatedRooms.Count(t => t.RoomType == new RoomCode("SGL")), Is.EqualTo(1));
     }
 
     [Test]
@@ -130,7 +130,7 @@ public class RoomAllocationTest
         var result = bookingService.AllocateRooms(context, peopleToBook);
 
         Assert.IsTrue(result.Success);
-        Assert.AreEqual(2, result.CurrentlyAllocatedRooms.Count);
+        Assert.That(result.CurrentlyAllocatedRooms.Count, Is.EqualTo(2));
         Assert.IsFalse(result.CurrentlyAllocatedRooms.Any(r => r.UnderBooked));
     }
 
@@ -161,7 +161,7 @@ public class RoomAllocationTest
         var result = bookingService.AllocateRooms(context, peopleToBook);
 
         Assert.IsTrue(result.Success);
-        Assert.AreEqual(3, result.CurrentlyAllocatedRooms.Count);
+        Assert.That(result.CurrentlyAllocatedRooms.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -204,7 +204,7 @@ public class RoomAllocationTest
         var result = bookingService.AllocateRooms(context, peopleToBook);
 
         Assert.IsTrue(result.Success);
-        Assert.AreEqual(new RoomCode("SGL"), result.CurrentlyAllocatedRooms[0].RoomType);
+        Assert.That(result.CurrentlyAllocatedRooms[0].RoomType, Is.EqualTo(new RoomCode("SGL")));
     }
 
     [Test]
@@ -219,7 +219,7 @@ public class RoomAllocationTest
         var result = bookingService.AllocateRooms(context, peopleToBook);
 
         Assert.IsTrue(result.Success);
-        Assert.AreEqual(1, result.CurrentlyAllocatedRooms.Count);
+        Assert.That(result.CurrentlyAllocatedRooms.Count, Is.EqualTo(1));
         Assert.IsFalse(result.CurrentlyAllocatedRooms[0].UnderBooked); // Ensure it's not underbooked
     }
 

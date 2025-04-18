@@ -1,5 +1,5 @@
 ﻿public class AvailableRoom
 {
-    public RoomCode RoomCode;
+    public required RoomCode RoomCode;
     public int Available;
 }

@@ -6,9 +6,9 @@ namespace ConsoleApp.Application
     {
         // Use the `Option` attribute to define the command-line arguments
         [Option('h', "hotels", Required = true, HelpText = "Path to the hotels JSON file.")]
-        public string HotelsFile { get; set; }
+        public required string HotelsFile { get; init; }
 
         [Option('b', "bookings", Required = true, HelpText = "Path to the bookings JSON file.")]
-        public string BookingsFile { get; set; }
+        public required string BookingsFile { get; init; }
     }    
 }

@@ -18,7 +18,10 @@ public class BookingsDateConverter : JsonConverter<DateOnly>
                                     && string.IsNullOrWhiteSpace(stringV)))
             throw new Exception($"We have a NULL value in DateOnlyConverter.");
 
-        string stringifiedDate = reader.Value.ToString();
+        string? stringifiedDate = reader.Value?.ToString();
+        if (stringifiedDate == null)
+            throw new Exception($"We have a NULL value in DateOnlyConverter.");
+
         if (DateOnly.TryParseExact(stringifiedDate, format, out var dateToReturn))
         {
             return dateToReturn;

@@ -45,20 +45,22 @@ class Program
         string jsonB = File.ReadAllText(options.BookingsFile);
         string jsonH = File.ReadAllText(options.HotelsFile);
 
-        List<Booking> bookings = JsonConvert.DeserializeObject<List<Booking>>(jsonB);
-        List<Hotel> hotels = JsonConvert.DeserializeObject<List<Hotel>>(jsonH);
+        List<Booking> bookings = JsonConvert.DeserializeObject<List<Booking>>(jsonB) ?? throw new Exception("We cannot have null bookings");
+        List<Hotel> hotels = JsonConvert.DeserializeObject<List<Hotel>>(jsonH) ?? throw new Exception("We cannot have null hotels");
+
 
         while (true)
         {
             Console.WriteLine(Environment.NewLine);
 
-            string input = Console.ReadLine()?.Trim();
+            string? input = Console.ReadLine()?.Trim();
 
             if (string.IsNullOrEmpty(input))
             {
-                Console.WriteLine("Empty command");
+                Console.WriteLine("You did not write anything, write something please.");
                 continue;
             }
+            
 
             var bookingService = new BookingService();
 

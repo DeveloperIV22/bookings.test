@@ -6,18 +6,20 @@ namespace ConsoleApp.Infrastructure
 
     public class RoomCodeConverter : JsonConverter<RoomCode>
     {
-        public override RoomCode ReadJson(JsonReader reader, Type objectType, RoomCode existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override RoomCode? ReadJson(JsonReader reader, Type objectType, RoomCode? existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (reader.TokenType != JsonToken.String || reader.Value == null)
             {
                 throw new JsonSerializationException("Invalid value");
             }
-            return new RoomCode(reader.Value.ToString());
+
+            string value = reader.Value.ToString() ?? throw new JsonSerializationException("Value cannot be null");
+            return new RoomCode(value);
         }
 
-        public override void WriteJson(JsonWriter writer, RoomCode value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, RoomCode? value, JsonSerializer serializer)
         {
-            writer.WriteValue(value);
+            writer.WriteValue(value?.ToString());
         }
     }
 }

@@ -93,8 +93,8 @@ namespace ConsoleApp.Domain.Services
                         return totalPeopleToBook;
                     }
                     
-                    AvailableRoom selectedRoom = rooms. // maybe we have a room that fits exactly remaining peple to book.
-                                        FirstOrDefault(x => hotel.RoomTypes.Single(r => r.Code == x.RoomCode).Size >= totalPeopleToBook);
+                    AvailableRoom? selectedRoom = rooms. // maybe we have a room that fits exactly remaining peple to book.
+                                       SingleOrDefault(x => hotel.RoomTypes.Single(r => r.Code == x.RoomCode).Size >= totalPeopleToBook);
 
                     if(selectedRoom == null) // if not then just select the first, they are ordered by sie, from smallest to biggest.
                     {

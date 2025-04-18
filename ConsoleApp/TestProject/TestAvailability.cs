@@ -51,7 +51,7 @@ namespace ConsoleApp.Domain.Models.Tests
             var context = new FilteredBookingContext(hotel, bookings, dateRange);
             int availableRooms = new BookingService().GetAvailability(context, roomCode);
 
-            Assert.AreEqual(2, availableRooms);
+            Assert.That(availableRooms, Is.EqualTo(2));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace ConsoleApp.Domain.Models.Tests
             var context = new FilteredBookingContext(hotel, bookings, dateRange);
             int availableRooms = new BookingService().GetAvailability(context, roomCode);
 
-            Assert.AreEqual(0, availableRooms);
+            Assert.That(availableRooms, Is.EqualTo(0));
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace ConsoleApp.Domain.Models.Tests
             var context = new FilteredBookingContext(hotel, bookings, dateRange);
             int availableRooms = new BookingService().GetAvailability(context, roomCode);
 
-            Assert.AreEqual(0, availableRooms);
+            Assert.That(availableRooms, Is.EqualTo(0));
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace ConsoleApp.Domain.Models.Tests
             var context = new FilteredBookingContext(hotel, bookings, dateRange);
             int availableRooms = new BookingService().GetAvailability(context, roomCode);
 
-            Assert.AreEqual(0, availableRooms);
+            Assert.That(availableRooms, Is.EqualTo(0));
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace ConsoleApp.Domain.Models.Tests
             var context = new FilteredBookingContext(hotel, bookings, dateRange);
             int availableRooms = new BookingService().GetAvailability(context, roomCode);
 
-            Assert.AreEqual(1, availableRooms);
+            Assert.That(availableRooms, Is.EqualTo(1));
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace ConsoleApp.Domain.Models.Tests
             var context = new FilteredBookingContext(hotel, bookings, dateRange);
             int availableRooms = new BookingService().GetAvailability(context, roomCode);
 
-            Assert.AreEqual(1, availableRooms);
+            Assert.That(availableRooms, Is.EqualTo(1));
         }
         [Test]
         public void Test_Overbooking_Availability()
@@ -144,7 +144,7 @@ namespace ConsoleApp.Domain.Models.Tests
             var context = new FilteredBookingContext(hotel, bookings, dateRange);
             int availableRooms = new BookingService().GetAvailability(context, roomCode);
 
-            Assert.AreEqual(-1, availableRooms);
+            Assert.That(availableRooms, Is.EqualTo(-1));
         }
     }
 }
