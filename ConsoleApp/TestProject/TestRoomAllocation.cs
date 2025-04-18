@@ -21,10 +21,10 @@ public class RoomAllocationTest
             },
             new List<Room>
             {
-                new Room(("SGL"), "101"),
-                new Room(("SGL"), "102"),
-                new Room(("DBL"), "201"),
-                new Room(("DBL"), "202")
+                new Room(new RoomCode("SGL"), "101"),
+                new Room(new RoomCode("SGL"), "102"),
+                new Room(new RoomCode("DBL"), "201"),
+                new Room(new RoomCode("DBL"), "202")
             }
         );
     }

@@ -2,6 +2,7 @@
 using ConsoleApp.Application;
 using ConsoleApp.Domain.Models;
 using ConsoleApp.Domain.Services;
+using ConsoleApp.Infrastructure;
 using Newtonsoft.Json;
 
 namespace AccessGroupTest;
@@ -27,6 +28,7 @@ class Program
 
     public static void RunBookingConsoleLoop(HotelAndBookingOptions options)
     {
+       
         Console.WriteLine($"Hotels File: {options.HotelsFile}");
         Console.WriteLine($"Bookings File: {options.BookingsFile}");
 
@@ -45,8 +47,8 @@ class Program
         string jsonB = File.ReadAllText(options.BookingsFile);
         string jsonH = File.ReadAllText(options.HotelsFile);
 
-        List<Booking> bookings = JsonConvert.DeserializeObject<List<Booking>>(jsonB) ?? throw new Exception("We cannot have null bookings");
-        List<Hotel> hotels = JsonConvert.DeserializeObject<List<Hotel>>(jsonH) ?? throw new Exception("We cannot have null hotels");
+        List<Booking> bookings = NewtonsoftCustomSerializer.DeserializeObject<List<Booking>>(jsonB) ?? throw new Exception("We cannot have null bookings");
+        List<Hotel> hotels = NewtonsoftCustomSerializer.DeserializeObject<List<Hotel>>(jsonH) ?? throw new Exception("We cannot have null hotels");
 
 
         while (true)

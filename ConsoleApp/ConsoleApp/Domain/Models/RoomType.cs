@@ -10,8 +10,7 @@ public record RoomType
     public readonly string Description;
     public readonly List<Amenity> Amenities;
     public readonly List<Feature> Features;
-        
-
+  
     [JsonConstructor]
     public RoomType(string code, int size, string description, List<Amenity> amenities, List<Feature> features)
     {
