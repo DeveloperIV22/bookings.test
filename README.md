@@ -1,6 +1,6 @@
 # Introduction
 
-The project is a DDD type of project but I did not bother to make separate folders, separate interface project and so on as in the documentation it is stated there is no need for advanced frameworks.
+The project is in the style of domain driven design but I did not bother to make Dependency injection or a separate project for contract.
 
 And the algorithm is made by me alone, without any help from ChatGPT.
 
