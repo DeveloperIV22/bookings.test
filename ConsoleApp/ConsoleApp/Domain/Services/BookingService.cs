@@ -1,5 +1,6 @@
 ﻿using ConsoleApp.Application;
 using ConsoleApp.Domain.Models;
+using ConsoleApp.Domain.Services.Models;
 using ConsoleApp.Domain.ValueObjects;
 
 

@@ -2,6 +2,7 @@
 using ConsoleApp.Application;
 using ConsoleApp.Domain.Models;
 using ConsoleApp.Domain.Services;
+using ConsoleApp.Domain.Services.Models;
 using ConsoleApp.Infrastructure;
 using Newtonsoft.Json;
 
@@ -54,6 +55,7 @@ class Program
         while (true)
         {
             Console.WriteLine(Environment.NewLine);
+            Console.WriteLine("Type your commands.");
 
             string? input = Console.ReadLine()?.Trim();
 

@@ -5,7 +5,7 @@ namespace ConsoleApp.Infrastructure
 {
     public static class NewtonsoftCustomSerializer
     {
-        public static T DeserializeObject<T>(string value, JsonConverter[] customConverters = null)
+        public static T? DeserializeObject<T>(string value)
         {
             var settings = new JsonSerializerSettings();
 

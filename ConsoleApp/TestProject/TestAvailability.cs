@@ -2,6 +2,7 @@ using ConsoleApp.Domain.ValueObjects;
 using ConsoleApp.Domain.Services;
 using ConsoleApp.Domain.Models.Enums;
 using TestProject;
+using ConsoleApp.Domain.Services.Models;
 
 namespace ConsoleApp.Domain.Models.Tests
 {

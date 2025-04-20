@@ -3,6 +3,7 @@ using ConsoleApp.Domain.Models;
 using ConsoleApp.Domain.Services;
 using ConsoleApp.Domain.ValueObjects;
 using TestProject;
+using ConsoleApp.Domain.Services.Models;
 
 namespace ConsoleApp.Domain.Models.Tests;
 

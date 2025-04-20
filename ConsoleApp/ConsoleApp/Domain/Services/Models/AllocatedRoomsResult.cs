@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp.Domain.Services;
+﻿namespace ConsoleApp.Domain.Services.Models;
 
 public class AllocatedRoomsResult
 {
