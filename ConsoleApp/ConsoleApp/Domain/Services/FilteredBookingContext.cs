@@ -5,9 +5,9 @@ namespace ConsoleApp.Domain.Services
 {
     public record FilteredBookingContext
     {
-        public Hotel Hotel;
-        public IReadOnlyList<Booking> Bookings;
-        public DateRange DateRange;
+        public Hotel Hotel { get; init; }
+        public IReadOnlyList<Booking> Bookings { get; init; }
+        public DateRange DateRange { get; init; }
 
         public FilteredBookingContext(Hotel hotel, List<Booking> bookings, DateRange dateRange)
         {
