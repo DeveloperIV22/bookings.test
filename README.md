@@ -1,7 +1,6 @@
 # Introduction
 
-The project is in the style of domain driven design but I did not bother to make Dependency injection or a separate project for contract.
-
+The project is in the style of domain driven design but I did not bother to make Dependency injection or a separate project for interfaces, as the requirements stated there is no need for complex frameworks.
 And the algorithm is made by me alone, without any help from ChatGPT.
 
 The algorithm is made to be simple to understand, NOT efficient at this point in time.
