@@ -16,4 +16,9 @@
     {
         return Value;
     }
+
+    public static implicit operator string(RoomCode v)
+    {
+        throw new NotImplementedException();
+    }
 }

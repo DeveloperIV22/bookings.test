@@ -17,7 +17,7 @@ namespace ConsoleApp.Domain.Services
         }
         public int GetAvailability(FilteredBookingContext context, RoomCode roomType)
         {
-            List<AvailableRoom> availableRoomsPerRoomType = GetAvailableRoomsPerRoomType(
+            List<AvailableRoom> availableRoomsPerRoomType = CalculateAvailabilityPerRoomType(
                 context.Hotel, context.Bookings, context.DateRange);
 
             var roomAvailability = availableRoomsPerRoomType
@@ -37,11 +37,10 @@ namespace ConsoleApp.Domain.Services
          int totalPeopleToBook)
         {
             List<AvailableRoom> orderedTotalAvailableRoomsPerRoomType = 
-                GetAvailableRoomsPerRoomType(context.Hotel, context.Bookings, context.DateRange)
+                CalculateAvailabilityPerRoomType(context.Hotel, context.Bookings, context.DateRange)
                 .Where(x => x.Available > 0).ToList();
 
-            AllocatedRoomsResult result = new AllocatedRoomsResult();
-            result.Success = true;
+            AllocatedRoomsResult result = new AllocatedRoomsResult(success: true);            
 
             if (orderedTotalAvailableRoomsPerRoomType.Count == 0)
             {
@@ -49,7 +48,7 @@ namespace ConsoleApp.Domain.Services
                 return result;
             }
 
-            int remainingPeopleTobook = TryToFitExactlyRoomGuests(context.Hotel, orderedTotalAvailableRoomsPerRoomType, result, totalPeopleToBook);
+            int remainingPeopleTobook = AllocateOptimallyByRoomSize(context.Hotel, orderedTotalAvailableRoomsPerRoomType, result, totalPeopleToBook);
 
             if (remainingPeopleTobook > 0)
             {
@@ -59,14 +58,15 @@ namespace ConsoleApp.Domain.Services
             return result;
         }
 
-        private int TryToFitExactlyRoomGuests(Hotel hotel, List<AvailableRoom> orderedTotalAvailableRoomsPerRoomType, AllocatedRoomsResult result, int totalPeopleToBook)
+        // this method can probably be split in 2 but for clarity I think it should not.
+        private int AllocateOptimallyByRoomSize(Hotel hotel, List<AvailableRoom> orderedTotalAvailableRoomsPerRoomType, AllocatedRoomsResult result, int totalPeopleToBook)
         {
             while (totalPeopleToBook > 0)
             {
                 // check if we can fit everybody in one room type.
                 foreach (var item in orderedTotalAvailableRoomsPerRoomType)
                 {
-                    int size = hotel.RoomTypes.Single(x => x.Code == item.RoomCode).Size;
+                    int size = GetRoomTypeByCode(hotel,item.RoomCode).Size;
                     int availableRooms = item.Available;
 
                     if (totalPeopleToBook % size == 0 &&
@@ -80,6 +80,7 @@ namespace ConsoleApp.Domain.Services
                         }
 
                         totalPeopleToBook = 0;
+                        return totalPeopleToBook; // we booked everybody.
                     }
                 }
                 // if we didnt exactly fit everybody then try to fit other way 
@@ -88,13 +89,13 @@ namespace ConsoleApp.Domain.Services
                     var rooms = orderedTotalAvailableRoomsPerRoomType
                         .Where(x => x.Available > 0);
 
-                    if(rooms.Count() == 0)
+                    if(!rooms.Any()) // we dont have any rooms to book.
                     {
                         return totalPeopleToBook;
                     }
                     
                     AvailableRoom? selectedRoom = rooms. // maybe we have a room that fits exactly remaining peple to book.
-                                       SingleOrDefault(x => hotel.RoomTypes.Single(r => r.Code == x.RoomCode).Size >= totalPeopleToBook);
+                                       SingleOrDefault(x => GetRoomTypeByCode(hotel, x.RoomCode).Size >= totalPeopleToBook);
 
                     if(selectedRoom == null) // if not then just select the first, they are ordered by sie, from smallest to biggest.
                     {
@@ -103,7 +104,7 @@ namespace ConsoleApp.Domain.Services
                      
                     if(selectedRoom != null)
                     {
-                        int size = hotel.RoomTypes.Single(x => x.Code == selectedRoom.RoomCode).Size;
+                        int size = GetRoomTypeByCode(hotel, selectedRoom.RoomCode).Size;
 
                         result.CurrentlyAllocatedRooms.Add(new(selectedRoom.RoomCode, size > totalPeopleToBook ? true : false));
 
@@ -121,26 +122,27 @@ namespace ConsoleApp.Domain.Services
             return totalPeopleToBook;
         }
 
-        private static List<AvailableRoom> GetAvailableRoomsPerRoomType(Hotel hotel, List<Booking> bookings, DateRange requiredDateRange)
+
+        private List<AvailableRoom> CalculateAvailabilityPerRoomType(Hotel hotel, IReadOnlyList<Booking> bookings, DateRange requiredDateRange)
         {
-            Dictionary<RoomCode, Dictionary<DateOnly, int>> bookedCountPerRoomTypeForRequiredDateRange = GetBookedCountPerRoomPerCurrentDateInterval(hotel, bookings, requiredDateRange);
-            Dictionary<RoomCode, int> totalAvailableRoomsPerRoomType = GetAvailableCountPerRoomForCurrentDateInterval(hotel, bookedCountPerRoomTypeForRequiredDateRange);
+            Dictionary<RoomCode, Dictionary<DateOnly, int>> bookedCountPerRoomTypeForRequiredDateRange = GetBookedCountPerRoomPerCurrentDateInterval(hotel.Id, bookings, requiredDateRange);
+            Dictionary<RoomCode, int> totalAvailableRoomsPerRoomType = GetAvailableCountPerRoomForCurrentDateInterval(hotel.RoomTypes, hotel.Rooms, bookedCountPerRoomTypeForRequiredDateRange);
 
             List<AvailableRoom> orderedTotalAvailableRoomsPerRoomType = totalAvailableRoomsPerRoomType
-                .OrderBy(x => hotel.RoomTypes.Single(r => r.Code == x.Key).Size)
-                .Select(x => new AvailableRoom { RoomCode = x.Key, Available = x.Value })
+                .OrderBy(x => GetRoomTypeByCode(hotel,x.Key).Size)
+                .Select(x => new AvailableRoom(x.Key,x.Value))
                 .ToList();
 
             return orderedTotalAvailableRoomsPerRoomType;
         }
 
-        private static Dictionary<RoomCode, int> GetAvailableCountPerRoomForCurrentDateInterval(Hotel hotel, Dictionary<RoomCode, Dictionary<DateOnly, int>> bookedCountPerRoomTypeForRequiredDateRange)
+        private  Dictionary<RoomCode, int> GetAvailableCountPerRoomForCurrentDateInterval(IReadOnlyList<RoomType> roomTypes, IReadOnlyList<Room> rooms, Dictionary<RoomCode, Dictionary<DateOnly, int>> bookedCountPerRoomTypeForRequiredDateRange)
         {
             Dictionary<RoomCode, int> totalAvailableRoomsPerRoomType = new Dictionary<RoomCode, int>();
 
-            foreach (var roomType in hotel.RoomTypes)
+            foreach (var roomType in roomTypes)
             {
-                int totalRoomsOfCurrentType = hotel.Rooms.Count(r => r.RoomType == roomType.Code);
+                int totalRoomsOfCurrentType = rooms.Count(r => r.RoomType == roomType.Code);
                 int currentIntervalBooking = 0;
                 if (bookedCountPerRoomTypeForRequiredDateRange.ContainsKey(roomType.Code))
                 {
@@ -153,11 +155,16 @@ namespace ConsoleApp.Domain.Services
             return totalAvailableRoomsPerRoomType;
         }
 
-        private static Dictionary<RoomCode, Dictionary<DateOnly, int>> GetBookedCountPerRoomPerCurrentDateInterval(Hotel hotel, List<Booking> bookings, DateRange requiredDateRange)
+        private RoomType GetRoomTypeByCode(Hotel hotel, RoomCode code)
+        {
+            return hotel.RoomTypes.Single(x => x.Code == code);
+        }
+
+        private static Dictionary<RoomCode, Dictionary<DateOnly, int>> GetBookedCountPerRoomPerCurrentDateInterval(string hotelId, IReadOnlyList<Booking> bookings, DateRange requiredDateRange)
         {
             Dictionary<RoomCode, Dictionary<DateOnly, int>> bookedCountPerRoomTypeForRequiredDateRange = new Dictionary<RoomCode, Dictionary<DateOnly, int>>();
 
-            List<Booking> filteredBookings = bookings.Where(b => b.HotelId == hotel.Id &&
+            IReadOnlyList<Booking> filteredBookings = bookings.Where(b => b.HotelId == hotelId &&
                                                             b.DateRange.Overlaps(requiredDateRange)).ToList();
 
             foreach (var booking in filteredBookings)

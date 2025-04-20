@@ -1,5 +1,10 @@
-﻿public class AvailableRoom
+﻿public record AvailableRoom
 {
-    public required RoomCode RoomCode;
-    public int Available;
+    public RoomCode RoomCode { get; init; }
+    public int Available { get; set; } 
+    public AvailableRoom(RoomCode roomCode, int available)
+    {
+        RoomCode = roomCode;
+        Available = available;
+    }
 }

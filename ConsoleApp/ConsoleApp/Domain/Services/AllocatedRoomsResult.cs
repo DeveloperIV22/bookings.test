@@ -2,21 +2,22 @@
 
 public class AllocatedRoomsResult
 {
-    public List<AllocatedRooms> CurrentlyAllocatedRooms { get; set; } = new List<AllocatedRooms>();
-    public bool Success { get; set; }
-
-    public class AllocatedRooms
+    public List<AllocatedRooms> CurrentlyAllocatedRooms;
+    public bool Success;
+    public AllocatedRoomsResult(bool success)
     {
-        public RoomCode RoomType { get; set; }
+        Success = success;
+        CurrentlyAllocatedRooms = new List<AllocatedRooms>();
+    }
 
-
-        public bool UnderBooked { get; set; }
-
+    public record AllocatedRooms
+    {
+        public RoomCode RoomType { get; init; }
+        public bool UnderBooked { get; init; }
         public AllocatedRooms(RoomCode roomType, bool underBooked)
         {
             RoomType = roomType;
             UnderBooked = underBooked;
         }
     }
-
 }
